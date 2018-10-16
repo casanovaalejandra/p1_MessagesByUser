@@ -21,8 +21,10 @@ public class MessageByUserReducer extends Reducer<Text,IntWritable,Text,IntWrita
         int count = 0;
         // iterator over list of 1s, to count them (no size() or length() method available)
         for (IntWritable value : values ){
-            count++;
+            count +=value.get();
+
         }
+        System.out.println(count+" "+key);
         // emit key-pair: key, count
         // key is the word
         // count is the number of times that word appeared on the tweets
