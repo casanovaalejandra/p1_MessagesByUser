@@ -24,7 +24,7 @@ public class MessageByUserDriver {
         job.setReducerClass(edu.uprm.cse.bigdata.MessageByUserReducer.class);
 
         job.setOutputKeyClass(Text.class);
-        job.setOutputValueClass(IntWritable.class);
+        job.setOutputValueClass(Text.class);
 
         System.exit(job.waitForCompletion(true) ? 0 : 1);
     }

@@ -10,22 +10,17 @@ import twitter4j.TwitterObjectFactory;
 
 import java.io.IOException;
 
-public class MessageByUserMapper extends Mapper<LongWritable,Text,Text,IntWritable> {
+public class MessageByUserMapper extends Mapper<LongWritable,Text,Text,Text> {
     @Override
     public void map(LongWritable key, Text value, Mapper.Context context) throws IOException, InterruptedException {
         //Esta clase lo que deber hacer es leer cada tweet y unirlo con su usuario
         String tweet = value.toString();
-        Text id = null;
-
-        //usando twitter4j se convierte el string jason ( el twitter object) a un Status object
-        //y con este puedes seleccionar el texto como un field a leer
-        //fuente: https://flanaras.wordpress.com/2016/01/11/twitter4j-status-object-string-json/
-
+        String text = null;
         Status status = null;
         try {
             status = TwitterObjectFactory.createStatus(tweet);
-            id =  new Text(Long.toString(status.getUser().getId()));
-            context.write(id, new IntWritable(1));
+            text = status.getText();
+            context.write(new Text(Long.toString(status.getUser().getId())),new Text(text));
         } catch (TwitterException e) {
             e.printStackTrace();
         }

@@ -3,35 +3,22 @@ package edu.uprm.cse.bigdata;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
-public class MessageByUserReducer extends Reducer<Text,IntWritable,Text,IntWritable>{
+public class MessageByUserReducer extends Reducer<Text,Text,Text,Text>{
     @Override
-    protected void reduce(Text key, Iterable<IntWritable> values, Context context)
+    protected void reduce(Text key, Iterable<Text> values, Context context)
             throws IOException, InterruptedException {
-        //super.reduce(key, values, context);
-
-        // key is the word matched from the cases
-        // values is a list of 1s, one for each time the word was found
-
         // setup a counter
-        int count = 0;
+        String message = null;
         // iterator over list of 1s, to count them (no size() or length() method available)
-        for (IntWritable value : values ){
-            count +=value.get();
+        for (Text value : values ){
+            message+=" "+ value.toString();
 
         }
-        System.out.println(count+" "+key);
-        // emit key-pair: key, count
-        // key is the word
-        // count is the number of times that word appeared on the tweets
-        Logger logger = LogManager.getRootLogger();
-        //logger.trace("Red: " + key.toString());
 
         // DEBUG
-        context.write(key, new IntWritable(count));
+        context.write(key, new Text(message));
     }
 }
